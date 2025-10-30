@@ -34,7 +34,8 @@ public class UserServiceImpl implements UserService {
         e.setName(req.name());
         e.setEmail(req.email());
         e.setPassword(req.password());
-        return userMapper.userEntityToDto(userRepo.save(e));
+        UserEntity saved =  userRepo.save(e);
+        return userMapper.userEntityToDto(saved);
     }
 
     @Override

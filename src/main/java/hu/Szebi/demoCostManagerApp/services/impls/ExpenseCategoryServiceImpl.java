@@ -34,7 +34,7 @@ public class ExpenseCategoryServiceImpl implements ExpenseCategoryService {
     public ExpenseCategoryDtoResponse save(CreateExpenseCategoryDtoReq req) {
         ExpenseCategoryEntity e = new ExpenseCategoryEntity();
         e.setName(req.name());
-        e.setName(req.name());
+        e.setDescription(req.description());
         ExpenseCategoryEntity saved = expenseCategoryRepo.save(e);
         return expenseCategoryMapper.expenseCategoryEntityToDto(saved);
     }
