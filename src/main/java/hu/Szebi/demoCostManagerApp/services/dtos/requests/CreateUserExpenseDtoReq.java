@@ -1,4 +1,4 @@
-package hu.Szebi.demoCostManagerApp;
+package hu.Szebi.demoCostManagerApp.services.dtos.requests;
 
 import java.time.LocalDate;
 

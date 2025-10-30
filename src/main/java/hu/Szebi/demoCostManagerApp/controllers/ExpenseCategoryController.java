@@ -1,12 +1,8 @@
 package hu.Szebi.demoCostManagerApp.controllers;
 
-import hu.Szebi.demoCostManagerApp.CreateExpenseCategoryDtoReq;
-import hu.Szebi.demoCostManagerApp.CreateUserExpenseDtoReq;
-import hu.Szebi.demoCostManagerApp.data.entities.ExpenseCategoryEntity;
-import hu.Szebi.demoCostManagerApp.data.entities.UserEntity;
-import hu.Szebi.demoCostManagerApp.data.entities.UserExpenseEntity;
-import hu.Szebi.demoCostManagerApp.data.repositories.ExpenseCategoryRepository;
-import hu.Szebi.demoCostManagerApp.data.repositories.UserExpenseRepository;
+import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateExpenseCategoryDtoReq;
+import hu.Szebi.demoCostManagerApp.services.dtos.responses.ExpenseCategoryDtoResponse;
+import hu.Szebi.demoCostManagerApp.services.ExpenseCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,29 +13,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpenseCategoryController {
 
-    final ExpenseCategoryRepository expenseCategoryRepo;
+    final ExpenseCategoryService expenseCategoryService;
 
     @GetMapping("/")
-    public List<ExpenseCategoryEntity> getExpenseCategories() {
-        return expenseCategoryRepo.findAll();
+    public List<ExpenseCategoryDtoResponse> getExpenseCategories() {
+        return expenseCategoryService.findAll();
     }
 
     @GetMapping("/{expense_category_id}")
-    public ExpenseCategoryEntity getExpenseCategoryById(@PathVariable long expense_category_id) {
-        return expenseCategoryRepo.findById(expense_category_id).orElse(null);
+    public ExpenseCategoryDtoResponse getExpenseCategoryById(@PathVariable long expense_category_id) {
+        return expenseCategoryService.findById(expense_category_id);
     }
 
     @PostMapping("/create")
-    public ExpenseCategoryEntity createExpenseCategory(@RequestBody CreateExpenseCategoryDtoReq req) {
-        ExpenseCategoryEntity expenseCategory = new ExpenseCategoryEntity();
-        expenseCategory.setName(req.name());
-        expenseCategory.setDescription(req.description());
-        return expenseCategoryRepo.save(expenseCategory);
+    public ExpenseCategoryDtoResponse createExpenseCategory(@RequestBody CreateExpenseCategoryDtoReq req) {
+        return expenseCategoryService.save(req);
     }
 
     @DeleteMapping("/delete/{expense_category_id}")
-    public void deleteExpenseCategory(@PathVariable long expense_category_id) {
-        expenseCategoryRepo.deleteById(expense_category_id);
+    public void deleteExpenseCategoryById(@PathVariable long expense_category_id) {
+        expenseCategoryService.deleteById(expense_category_id);
     }
 
 }

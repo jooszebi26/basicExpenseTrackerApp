@@ -1,6 +1,6 @@
 package hu.Szebi.demoCostManagerApp.controllers;
 
-import hu.Szebi.demoCostManagerApp.CreateUserDtoReq;
+import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserDtoReq;
 import hu.Szebi.demoCostManagerApp.data.entities.UserEntity;
 import hu.Szebi.demoCostManagerApp.data.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;

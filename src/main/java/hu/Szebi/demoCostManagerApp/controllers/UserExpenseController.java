@@ -1,6 +1,6 @@
 package hu.Szebi.demoCostManagerApp.controllers;
 
-import hu.Szebi.demoCostManagerApp.CreateUserExpenseDtoReq;
+import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserExpenseDtoReq;
 import hu.Szebi.demoCostManagerApp.data.entities.ExpenseCategoryEntity;
 import hu.Szebi.demoCostManagerApp.data.entities.UserEntity;
 import hu.Szebi.demoCostManagerApp.data.entities.UserExpenseEntity;
@@ -16,6 +16,8 @@ import java.util.List;
 @RequestMapping("api/user_expense")
 @RequiredArgsConstructor
 public class UserExpenseController {
+
+    //TO DO: insert UserExpenseService layer
 
     final UserExpenseRepository userExpenseRepo;
     final UserRepository userRepo;
