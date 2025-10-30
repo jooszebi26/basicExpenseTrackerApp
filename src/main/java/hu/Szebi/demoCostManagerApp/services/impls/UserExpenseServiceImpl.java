@@ -17,7 +17,6 @@ public class UserExpenseServiceImpl implements UserExpenseService {
     //TO DO: implementation
 
     private final UserExpenseRepository userExpenseRepo;
-
     private final UserExpenseMapper userExpenseMapper;
 
 

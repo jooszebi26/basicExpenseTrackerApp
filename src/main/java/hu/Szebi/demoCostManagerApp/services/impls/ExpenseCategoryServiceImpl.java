@@ -16,7 +16,6 @@ import java.util.List;
 public class ExpenseCategoryServiceImpl implements ExpenseCategoryService {
 
     final ExpenseCategoryRepository expenseCategoryRepo;
-
     final ExpenseCategoryMapper expenseCategoryMapper;
 
     @Override

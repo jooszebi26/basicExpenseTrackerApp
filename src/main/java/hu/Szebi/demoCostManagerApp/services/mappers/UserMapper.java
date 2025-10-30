@@ -3,6 +3,7 @@ package hu.Szebi.demoCostManagerApp.services.mappers;
 import hu.Szebi.demoCostManagerApp.data.entities.UserEntity;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserDtoResponse;
 import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
