@@ -36,18 +36,18 @@ public class UserExpenseController {
         return userExpenseService.listByUserId(user_id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public UserExpenseDtoResponse createUserExpense(@RequestBody CreateUserExpenseDtoReq req) {
         return userExpenseService.save(req);
 
     }
 
-    @PatchMapping("/update/{userExpense_id}")
+    @PatchMapping("/{userExpense_id}")
     public UserExpenseDtoResponse updateUserExpenseById(@PathVariable long userExpense_id, @RequestBody CreateUserExpenseDtoReq req) {
         return userExpenseService.updateById(req, userExpense_id);
     }
 
-    @DeleteMapping("/delete/{user_expense_id}")
+    @DeleteMapping("/{user_expense_id}")
     public void deleteUserExpenseById(@PathVariable long user_expense_id) {
         userExpenseService.deleteById(user_expense_id);
     }

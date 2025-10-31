@@ -25,12 +25,12 @@ public class ExpenseCategoryController {
         return expenseCategoryService.findById(expense_category_id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public ExpenseCategoryDtoResponse createExpenseCategory(@RequestBody CreateExpenseCategoryDtoReq req) {
         return expenseCategoryService.save(req);
     }
 
-    @DeleteMapping("/delete/{expense_category_id}")
+    @DeleteMapping("/{expense_category_id}")
     public void deleteExpenseCategoryById(@PathVariable long expense_category_id) {
         expenseCategoryService.deleteById(expense_category_id);
     }

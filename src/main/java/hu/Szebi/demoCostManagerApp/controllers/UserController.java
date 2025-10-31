@@ -25,12 +25,12 @@ public class UserController {
         return userService.findById(user_id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public UserDtoResponse createUser(@RequestBody CreateUserDtoReq req) {
         return userService.save(req);
     }
 
-    @DeleteMapping("/delete/{user_id}")
+    @DeleteMapping("/{user_id}")
     public void deleteUser(@PathVariable long user_id) {
         userService.deleteById(user_id);
     }
