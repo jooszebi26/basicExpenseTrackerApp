@@ -3,6 +3,7 @@ package hu.Szebi.demoCostManagerApp.controllers;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateExpenseCategoryDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.ExpenseCategoryDtoResponse;
 import hu.Szebi.demoCostManagerApp.services.ExpenseCategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class ExpenseCategoryController {
     }
 
     @PostMapping("/")
-    public ExpenseCategoryDtoResponse createExpenseCategory(@RequestBody CreateExpenseCategoryDtoReq req) {
+    public ExpenseCategoryDtoResponse createExpenseCategory(@Valid @RequestBody CreateExpenseCategoryDtoReq req) {
         return expenseCategoryService.save(req);
     }
 

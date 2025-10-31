@@ -3,6 +3,7 @@ package hu.Szebi.demoCostManagerApp.controllers;
 import hu.Szebi.demoCostManagerApp.services.UserService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserDtoResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public UserDtoResponse createUser(@RequestBody CreateUserDtoReq req) {
+    public UserDtoResponse createUser(@Valid @RequestBody CreateUserDtoReq req) {
         return userService.save(req);
     }
 

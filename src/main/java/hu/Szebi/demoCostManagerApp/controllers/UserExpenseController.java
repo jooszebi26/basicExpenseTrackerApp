@@ -3,6 +3,7 @@ package hu.Szebi.demoCostManagerApp.controllers;
 import hu.Szebi.demoCostManagerApp.services.UserExpenseService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserExpenseDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserExpenseDtoResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,13 +38,13 @@ public class UserExpenseController {
     }
 
     @PostMapping("/")
-    public UserExpenseDtoResponse createUserExpense(@RequestBody CreateUserExpenseDtoReq req) {
+    public UserExpenseDtoResponse createUserExpense(@Valid @RequestBody CreateUserExpenseDtoReq req) {
         return userExpenseService.save(req);
 
     }
 
     @PatchMapping("/{userExpense_id}")
-    public UserExpenseDtoResponse updateUserExpenseById(@PathVariable long userExpense_id, @RequestBody CreateUserExpenseDtoReq req) {
+    public UserExpenseDtoResponse updateUserExpenseById(@PathVariable long userExpense_id, @Valid @RequestBody CreateUserExpenseDtoReq req) {
         return userExpenseService.updateById(req, userExpense_id);
     }
 
