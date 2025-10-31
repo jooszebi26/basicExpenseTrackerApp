@@ -1,8 +1,8 @@
 package hu.Szebi.demoCostManagerApp.controllers;
 
+import hu.Szebi.demoCostManagerApp.services.UserService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserDtoReq;
-import hu.Szebi.demoCostManagerApp.data.entities.UserEntity;
-import hu.Szebi.demoCostManagerApp.data.repositories.UserRepository;
+import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserDtoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,30 +13,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    final UserRepository userRepo;
+    final UserService userService;
 
     @GetMapping("/")
-    public List<UserEntity> getUsers() {
-        return userRepo.findAll();
+    public List<UserDtoResponse> getUsers() {
+        return userService.findAll();
     }
 
     @GetMapping("/{user_id}")
-    public UserEntity getUser(@PathVariable long user_id) {
-        return userRepo.findById(user_id).orElse(null);
+    public UserDtoResponse getUser(@PathVariable long user_id) {
+        return userService.findById(user_id);
     }
 
     @PostMapping("/create")
-    public UserEntity createUser(@RequestBody CreateUserDtoReq req) {
-        UserEntity user = new UserEntity();
-        user.setName(req.name());
-        user.setEmail(req.email());
-        user.setPassword(req.password());
-        return userRepo.save(user);
+    public UserDtoResponse createUser(@RequestBody CreateUserDtoReq req) {
+        return userService.save(req);
     }
 
     @DeleteMapping("/delete/{user_id}")
     public void deleteUser(@PathVariable long user_id) {
-        userRepo.deleteById(user_id);
+        userService.deleteById(user_id);
     }
 
 }

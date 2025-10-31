@@ -1,6 +1,5 @@
 package hu.Szebi.demoCostManagerApp.data.repositories;
 
-import hu.Szebi.demoCostManagerApp.data.entities.UserEntity;
 import hu.Szebi.demoCostManagerApp.data.entities.UserExpenseEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
