@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record CreateUserDtoReq(
         @NotNull @NotEmpty String name,
-        @Email String email,
+        @NotNull @NotEmpty @Email String email,
         @NotNull @NotEmpty String password
 ) {
 }

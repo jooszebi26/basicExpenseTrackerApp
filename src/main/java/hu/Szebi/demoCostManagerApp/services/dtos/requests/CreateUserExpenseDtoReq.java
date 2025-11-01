@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public record CreateUserExpenseDtoReq(
         @PositiveOrZero Long user_id,
         @PositiveOrZero Long category_id,
-        @Positive Integer cost,
+        @NotNull @Positive Integer cost,
         @NotNull @NotEmpty @PastOrPresent LocalDate expense_date,
         @NotNull String comment
 ) {
