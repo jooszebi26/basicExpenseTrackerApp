@@ -11,7 +11,7 @@ public record CreateUserExpenseDtoReq(
         @NotNull @NotEmpty Long user_id,
         @NotNull @NotEmpty Long category_id,
         @Positive Integer cost,
-        @PastOrPresent LocalDate expense_date,
+        @NotNull @NotEmpty @PastOrPresent LocalDate expense_date,
         @NotNull String comment
 ) {
 }

@@ -2,6 +2,7 @@ package hu.Szebi.demoCostManagerApp.services.impls;
 
 import hu.Szebi.demoCostManagerApp.data.entities.ExpenseCategoryEntity;
 import hu.Szebi.demoCostManagerApp.data.repositories.ExpenseCategoryRepository;
+import hu.Szebi.demoCostManagerApp.handlers.ValidBusinessLogicHandler;
 import hu.Szebi.demoCostManagerApp.services.mappers.ExpenseCategoryMapper;
 import hu.Szebi.demoCostManagerApp.services.ExpenseCategoryService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateExpenseCategoryDtoReq;
@@ -17,6 +18,7 @@ public class ExpenseCategoryServiceImpl implements ExpenseCategoryService {
 
     final ExpenseCategoryRepository expenseCategoryRepo;
     final ExpenseCategoryMapper expenseCategoryMapper;
+    final ValidBusinessLogicHandler validBusinessLogicHandler;
 
     @Override
     public List<ExpenseCategoryDtoResponse> findAll() {
@@ -26,7 +28,7 @@ public class ExpenseCategoryServiceImpl implements ExpenseCategoryService {
 
     @Override
     public ExpenseCategoryDtoResponse findById(Long categoryId) {
-        ExpenseCategoryEntity e = expenseCategoryRepo.findById(categoryId).orElse(null);
+        var e = validBusinessLogicHandler.findByIdOr404(expenseCategoryRepo, categoryId, "ExpenseCategory");
         return expenseCategoryMapper.expenseCategoryEntityToDto(e);
     }
 
@@ -41,6 +43,6 @@ public class ExpenseCategoryServiceImpl implements ExpenseCategoryService {
 
     @Override
     public void deleteById(Long categoryId) {
-        expenseCategoryRepo.deleteById(categoryId);
+        validBusinessLogicHandler.deleteByIdOr404(expenseCategoryRepo, categoryId, "ExpenseCategory");
     }
 }

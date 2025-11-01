@@ -2,6 +2,7 @@ package hu.Szebi.demoCostManagerApp.services.impls;
 
 import hu.Szebi.demoCostManagerApp.data.entities.UserEntity;
 import hu.Szebi.demoCostManagerApp.data.repositories.UserRepository;
+import hu.Szebi.demoCostManagerApp.handlers.ValidBusinessLogicHandler;
 import hu.Szebi.demoCostManagerApp.services.UserService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserDtoResponse;
@@ -17,6 +18,7 @@ public class UserServiceImpl implements UserService {
 
     final UserRepository userRepo;
     final UserMapper userMapper;
+    final ValidBusinessLogicHandler validBusinessLogicHandler;
 
     @Override
     public List<UserDtoResponse> findAll() {
@@ -25,7 +27,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDtoResponse findById(Long userId) {
-        return userMapper.userEntityToDto(userRepo.findById(userId).orElse(null));
+        var e = validBusinessLogicHandler.findByIdOr404(userRepo, userId, "User");
+        return userMapper.userEntityToDto(e);
     }
 
     @Override
@@ -40,6 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Long userId) {
-        userRepo.deleteById(userId);
+        var e = validBusinessLogicHandler.findByIdOr404(userRepo, userId, "User");
+        userRepo.delete(e);
     }
 }
