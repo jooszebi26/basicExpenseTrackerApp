@@ -4,11 +4,13 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-public record CreateUserExpenseDtoReq(
+public record UpdateUserExpenseDtoReq(
+
         @PositiveOrZero Long user_id,
         @PositiveOrZero Long category_id,
         @Positive Integer cost,
-        @NotNull @NotEmpty @PastOrPresent LocalDate expense_date,
-        @NotNull String comment
+        @PastOrPresent LocalDate expense_date,
+        String comment
+
 ) {
 }

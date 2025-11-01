@@ -9,6 +9,7 @@ import hu.Szebi.demoCostManagerApp.data.repositories.UserRepository;
 import hu.Szebi.demoCostManagerApp.handlers.ValidBusinessLogicHandler;
 import hu.Szebi.demoCostManagerApp.services.UserExpenseService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserExpenseDtoReq;
+import hu.Szebi.demoCostManagerApp.services.dtos.requests.UpdateUserExpenseDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserExpenseDtoResponse;
 import hu.Szebi.demoCostManagerApp.services.mappers.UserExpenseMapper;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +68,7 @@ public class UserExpenseServiceImpl implements UserExpenseService {
     }
 
     @Override
-    public UserExpenseDtoResponse updateById(CreateUserExpenseDtoReq req, Long userExpenseId) {
+    public UserExpenseDtoResponse update(UpdateUserExpenseDtoReq req, Long userExpenseId) {
         UserExpenseEntity e = validBusinessLogicHandler.findByIdOr404(userExpenseRepo, userExpenseId, "UserExpense");
         UserEntity userEntity;
         if (req.user_id() != null) {

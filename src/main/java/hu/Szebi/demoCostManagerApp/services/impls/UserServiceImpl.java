@@ -5,6 +5,7 @@ import hu.Szebi.demoCostManagerApp.data.repositories.UserRepository;
 import hu.Szebi.demoCostManagerApp.handlers.ValidBusinessLogicHandler;
 import hu.Szebi.demoCostManagerApp.services.UserService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserDtoReq;
+import hu.Szebi.demoCostManagerApp.services.dtos.requests.UpdateUserDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserDtoResponse;
 import hu.Szebi.demoCostManagerApp.services.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,23 @@ public class UserServiceImpl implements UserService {
         e.setPassword(req.password());
         UserEntity saved =  userRepo.save(e);
         return userMapper.userEntityToDto(saved);
+    }
+
+    @Override
+    public UserDtoResponse update(UpdateUserDtoReq req, Long userId) {
+        var e = validBusinessLogicHandler.findByIdOr404(userRepo, userId, "User");
+        if (req.name() != null) {
+            e.setName(req.name());
+        }
+
+        if (req.email() != null) {
+            e.setEmail(req.email());
+        }
+
+        if (req.password() != null) {
+            e.setPassword(req.password());
+        }
+        return userMapper.userEntityToDto(userRepo.save(e));
     }
 
     @Override
