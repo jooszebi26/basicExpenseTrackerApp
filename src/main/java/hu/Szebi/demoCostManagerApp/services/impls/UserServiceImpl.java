@@ -9,6 +9,7 @@ import hu.Szebi.demoCostManagerApp.services.dtos.requests.UpdateUserDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserDtoResponse;
 import hu.Szebi.demoCostManagerApp.services.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,10 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDtoResponse save(CreateUserDtoReq req) {
-        UserEntity e = new UserEntity();
-        e.setName(req.name());
-        e.setEmail(req.email());
-        e.setPassword(req.password());
+        UserEntity e = userMapper.dtoToUserEntity(req);
         UserEntity saved =  userRepo.save(e);
         return userMapper.userEntityToDto(saved);
     }

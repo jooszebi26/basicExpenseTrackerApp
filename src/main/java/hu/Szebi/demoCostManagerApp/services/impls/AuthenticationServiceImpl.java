@@ -7,7 +7,6 @@ import hu.Szebi.demoCostManagerApp.data.repositories.UserRepository;
 import hu.Szebi.demoCostManagerApp.handlers.ValidBusinessLogicHandler;
 import hu.Szebi.demoCostManagerApp.services.AuthUserService;
 import hu.Szebi.demoCostManagerApp.services.AuthenticationService;
-import hu.Szebi.demoCostManagerApp.services.JwtService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.LoginDto;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepo;
     private final ValidBusinessLogicHandler validBusinessLogicHandler;
     private final AuthUserService authUserService;
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtService;
 
     @Override
     public String login(LoginDto req) {

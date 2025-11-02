@@ -22,7 +22,7 @@ public class ValidBusinessLogicHandler {
 
     public UserEntity findByEmailOr404(UserRepository repo, String email, String name) {
         return repo.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, name + " not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, name + " email is wrong"));
     }
 
 }

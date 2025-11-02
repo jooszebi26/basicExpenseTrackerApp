@@ -1,7 +1,7 @@
 package hu.Szebi.demoCostManagerApp.Config;
 
 import hu.Szebi.demoCostManagerApp.services.AuthUserService;
-import hu.Szebi.demoCostManagerApp.services.JwtService;
+import hu.Szebi.demoCostManagerApp.services.impls.JwtServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtService;
     private final AuthUserService userDetailsService;
 
     @Override
