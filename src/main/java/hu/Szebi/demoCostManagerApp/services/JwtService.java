@@ -3,6 +3,7 @@ package hu.Szebi.demoCostManagerApp.services;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,8 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "5a7c3d7e2b9e6f4a6a8c3d5e7f9a2b1c5d7e9f6a8b3c4d5e6f7a8b9c1d2e3f4"; // legalább 64 karakter
+    @Value("${app.jwt.secret}")
+    private String SECRET_KEY;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
