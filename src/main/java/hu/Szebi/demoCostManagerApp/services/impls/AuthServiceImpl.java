@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthUserService {
 
-    final UserRepository userRepo;
+    private final UserRepository userRepo;
 
     @Override
     public UserDetailsService getUserDetailsService() {

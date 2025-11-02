@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    final AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
     @GetMapping("/")
     public String login(@Valid @RequestBody LoginDto req) {

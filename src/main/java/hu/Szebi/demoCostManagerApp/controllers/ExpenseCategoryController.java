@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpenseCategoryController {
 
-    final ExpenseCategoryService expenseCategoryService;
+    private final ExpenseCategoryService expenseCategoryService;
 
     @GetMapping("/")
     public List<ExpenseCategoryDtoResponse> getExpenseCategories() {

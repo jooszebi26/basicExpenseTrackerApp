@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserExpenseController {
 
-    final UserExpenseService userExpenseService;
+    private final UserExpenseService userExpenseService;
 
     @GetMapping("/")
     public List<UserExpenseDtoResponse> getUserExpenses() {

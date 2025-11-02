@@ -17,9 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    final UserRepository userRepo;
-    final UserMapper userMapper;
-    final ValidBusinessLogicHandler validBusinessLogicHandler;
+    private final UserRepository userRepo;
+    private final UserMapper userMapper;
+    private final ValidBusinessLogicHandler validBusinessLogicHandler;
 
     @Override
     public List<UserDtoResponse> findAll() {

@@ -17,9 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpenseCategoryServiceImpl implements ExpenseCategoryService {
 
-    final ExpenseCategoryRepository expenseCategoryRepo;
-    final ExpenseCategoryMapper expenseCategoryMapper;
-    final ValidBusinessLogicHandler validBusinessLogicHandler;
+    private final ExpenseCategoryRepository expenseCategoryRepo;
+    private final ExpenseCategoryMapper expenseCategoryMapper;
+    private final ValidBusinessLogicHandler validBusinessLogicHandler;
 
     @Override
     public List<ExpenseCategoryDtoResponse> findAll() {
