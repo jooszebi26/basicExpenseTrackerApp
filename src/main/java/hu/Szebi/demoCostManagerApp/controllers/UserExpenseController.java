@@ -2,6 +2,7 @@ package hu.Szebi.demoCostManagerApp.controllers;
 
 import hu.Szebi.demoCostManagerApp.services.UserExpenseService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserExpenseDtoReq;
+import hu.Szebi.demoCostManagerApp.services.dtos.requests.UpdateUserExpenseDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserExpenseDtoResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +45,8 @@ public class UserExpenseController {
     }
 
     @PatchMapping("/{userExpense_id}")
-    public UserExpenseDtoResponse updateUserExpenseById(@PathVariable long userExpense_id, @Valid @RequestBody CreateUserExpenseDtoReq req) {
-        return userExpenseService.updateById(req, userExpense_id);
+    public UserExpenseDtoResponse updateUserExpenseById(@PathVariable long userExpense_id, @Valid @RequestBody UpdateUserExpenseDtoReq req) {
+        return userExpenseService.update(req, userExpense_id);
     }
 
     @DeleteMapping("/{user_expense_id}")
