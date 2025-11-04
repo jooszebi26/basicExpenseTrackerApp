@@ -47,7 +47,7 @@ public class UserExpenseServiceImpl implements UserExpenseService {
 
     @Override
     public List<UserExpenseDtoResponse> listByYear(Long userId, int year) {
-        var expenses = userExpenseRepo.findByUserIdAndMonth(userId, year);
+        var expenses = userExpenseRepo.findByUserIdAndYear(userId, year);
         return userExpenseMapper.userExpenseEntitiesToDtos(expenses);
     }
 
@@ -94,7 +94,7 @@ public class UserExpenseServiceImpl implements UserExpenseService {
             expenseCategoryEntity = validBusinessLogicHandler.findByIdOr404(expenseCategoryRepo, req.category_id(), "ExpenseCategory");
         }
 
-        if (req.expense_date() != null) {
+        if (req.cost() != null) {
             expense.setCost(req.cost());
         }
 
