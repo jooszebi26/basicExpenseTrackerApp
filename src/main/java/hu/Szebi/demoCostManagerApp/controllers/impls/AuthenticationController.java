@@ -1,4 +1,4 @@
-package hu.Szebi.demoCostManagerApp.controllers;
+package hu.Szebi.demoCostManagerApp.controllers.impls;
 
 import hu.Szebi.demoCostManagerApp.services.AuthenticationService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserDtoReq;

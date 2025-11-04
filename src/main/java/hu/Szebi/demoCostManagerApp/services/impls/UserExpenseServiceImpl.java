@@ -7,6 +7,7 @@ import hu.Szebi.demoCostManagerApp.data.repositories.ExpenseCategoryRepository;
 import hu.Szebi.demoCostManagerApp.data.repositories.UserExpenseRepository;
 import hu.Szebi.demoCostManagerApp.data.repositories.UserRepository;
 import hu.Szebi.demoCostManagerApp.handlers.ValidBusinessLogicHandler;
+import hu.Szebi.demoCostManagerApp.services.AuthUserService;
 import hu.Szebi.demoCostManagerApp.services.UserExpenseService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserExpenseDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.UpdateUserExpenseDtoReq;
@@ -29,20 +30,20 @@ public class UserExpenseServiceImpl implements UserExpenseService {
 
 
     @Override
-    public List<UserExpenseDtoResponse> findAll() {
-        return userExpenseMapper.userExpenseEntitiesToDtos(userExpenseRepo.findAll());
+    public List<UserExpenseDtoResponse> findAll(Long userId) {
+        return userExpenseMapper.userExpenseEntitiesToDtos(userExpenseRepo.findByUserId(userId));
     }
 
     @Override
-    public UserExpenseDtoResponse findById(Long userExpenseId) {
-        var e = validBusinessLogicHandler.findByIdOr404(userExpenseRepo, userExpenseId, "UserExpense");
-        return userExpenseMapper.userExpenseEntityToDto(e);
+    public UserExpenseDtoResponse findById(Long userExpenseId, String email) {
+        var expense = validBusinessLogicHandler.findByIdOr404(userExpenseRepo, userExpenseId, "UserExpense");
+        return userExpenseMapper.userExpenseEntityToDto(expense);
     }
 
     @Override
-    public List<UserExpenseDtoResponse> listByCategoryId(Long categoryId) {
-        validBusinessLogicHandler.findByIdOr404(expenseCategoryRepo, categoryId, "ExpenseCategory");
-        return userExpenseMapper.userExpenseEntitiesToDtos(userExpenseRepo.findByExpenseCategoryId(categoryId));
+    public List<UserExpenseDtoResponse> listByCategoryId(Long categoryId, Long userId) {
+        var expenses = validBusinessLogicHandler.findByUserIdAndCategoryId(userExpenseRepo,userId,categoryId, "UserExpense");
+        return userExpenseMapper.userExpenseEntitiesToDtos(expenses);
     }
 
     @Override
@@ -52,7 +53,15 @@ public class UserExpenseServiceImpl implements UserExpenseService {
     }
 
     @Override
-    public UserExpenseDtoResponse save(CreateUserExpenseDtoReq req) {
+    public List<UserExpenseDtoResponse> listByUserEmail(String email) {
+        var userEntity = validBusinessLogicHandler.findByEmailOr404(userRepo, email, "User");
+        return userExpenseMapper.userExpenseEntitiesToDtos(
+                userExpenseRepo.findByUserId(userEntity.getId())
+        );
+    }
+
+    @Override
+    public UserExpenseDtoResponse save(CreateUserExpenseDtoReq req, String email) {
         UserExpenseEntity e = new UserExpenseEntity();
         UserEntity userEntity = userRepo.findById(req.user_id()).orElse(null);
         ExpenseCategoryEntity expenseCategoryEntity = expenseCategoryRepo.findById(req.category_id()).orElse(null);
@@ -68,7 +77,7 @@ public class UserExpenseServiceImpl implements UserExpenseService {
     }
 
     @Override
-    public UserExpenseDtoResponse update(UpdateUserExpenseDtoReq req, Long userExpenseId) {
+    public UserExpenseDtoResponse update(UpdateUserExpenseDtoReq req, Long userExpenseId, String email) {
         UserExpenseEntity e = validBusinessLogicHandler.findByIdOr404(userExpenseRepo, userExpenseId, "UserExpense");
         UserEntity userEntity;
         if (req.user_id() != null) {
@@ -88,7 +97,7 @@ public class UserExpenseServiceImpl implements UserExpenseService {
     }
 
     @Override
-    public void deleteById(Long userExpenseId) {
+    public void deleteById(Long userExpenseId, String email) {
         validBusinessLogicHandler.deleteByIdOr404(userExpenseRepo, userExpenseId, "UserExpense");
     }
 }

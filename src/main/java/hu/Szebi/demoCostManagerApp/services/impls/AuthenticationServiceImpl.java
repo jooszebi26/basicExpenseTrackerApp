@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -46,12 +47,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         }
 
-        RoleEntity roleUser = roleRepo.findByName("ROLE_USER");
+        RoleEntity roleUser = roleRepo.findByName("USER");
         UserEntity u = new UserEntity();
         u.setName(req.name());
         u.setEmail(req.email());
         u.setPassword(passwordEncoder.encode(req.password()));
-        u.setRoles(List.of(roleUser));
+        u.setRoles(Set.of(roleUser));
 
         userRepo.save(u);
     }
