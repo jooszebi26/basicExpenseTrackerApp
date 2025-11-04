@@ -46,14 +46,24 @@ public class UserExpenseServiceImpl implements UserExpenseService {
     }
 
     @Override
-    public List<UserExpenseDtoResponse> listByUserId(Long userId) {
-        return List.of();
+    public List<UserExpenseDtoResponse> listByYear(Long userId, int year) {
+        var expenses = userExpenseRepo.findByUserIdAndMonth(userId, year);
+        return userExpenseMapper.userExpenseEntitiesToDtos(expenses);
     }
 
     @Override
-    public List<UserExpenseDtoResponse> listByUserEmail(String email) {
-        return List.of();
+    public List<UserExpenseDtoResponse> listByDay(Long userId, Integer day) {
+        var expenses = userExpenseRepo.findByUserIdAndDay(userId, day);
+        return userExpenseMapper.userExpenseEntitiesToDtos(expenses);
     }
+
+    @Override
+    public List<UserExpenseDtoResponse> listByMonth(Long userId, int month) {
+        var expenses = userExpenseRepo.findByUserIdAndMonth(userId, month);
+        return userExpenseMapper.userExpenseEntitiesToDtos(expenses);
+    }
+
+
 
 
     @Override

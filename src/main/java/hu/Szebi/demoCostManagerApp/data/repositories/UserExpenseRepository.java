@@ -2,6 +2,8 @@ package hu.Szebi.demoCostManagerApp.data.repositories;
 
 import hu.Szebi.demoCostManagerApp.data.entities.UserExpenseEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,5 +15,39 @@ public interface UserExpenseRepository extends JpaRepository<UserExpenseEntity, 
     Optional<UserExpenseEntity> findByUserIdAndId(Long userId, Long id);
     Optional<List<UserExpenseEntity>> findByUserIdAndExpenseCategoryId(Long userId, Long categoryId);
     void deleteByUserIdAndExpenseCategoryId(Long userId, Long categoryId);
+
+    @Query("""
+        SELECT e 
+        FROM UserExpenseEntity e 
+        WHERE e.user.id = :userId 
+          AND YEAR(e.expenseDate) = :year 
+    """)
+    List<UserExpenseEntity> findByUserIdAndYear(
+            @Param("userId") Long userId,
+            @Param("month") int month
+    );
+
+    @Query("""
+        SELECT e 
+        FROM UserExpenseEntity e 
+        WHERE e.user.id = :userId 
+          AND MONTH(e.expenseDate) = :month
+    """)
+    List<UserExpenseEntity> findByUserIdAndMonth(
+            @Param("userId") Long userId,
+            @Param("month") int month
+    );
+
+    @Query("""
+        SELECT e 
+        FROM UserExpenseEntity e 
+        WHERE e.user.id = :userId 
+          AND DAY(e.expenseDate) = :day
+    """)
+    List<UserExpenseEntity> findByUserIdAndDay(
+            @Param("userId") Long userId,
+            @Param("month") int day
+    );
+
 
 }

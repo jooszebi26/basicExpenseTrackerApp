@@ -22,10 +22,21 @@ public class UserExpenseController {
 
     @GetMapping("/expenses")
     public List<UserExpenseDtoResponse> getMyExpenses(@RequestParam(name = "categoryId", required = false) Long categoryId,
+                                                      @RequestParam(name="year", required = false) Integer year,
+                                                      @RequestParam(name = "month", required = false) Integer month,
+                                                      @RequestParam(name = "day", required = false) Integer day,
                                                       @AuthenticationPrincipal CustomUserDetails user)
     {
         if (categoryId != null){
             return userExpenseService.listByCategoryId(categoryId, user.getId());
+        }
+        else if (year != null){
+            return userExpenseService.listByYear(user.getId(), year);
+        }
+        else if (month != null) {
+            return userExpenseService.listByMonth(user.getId(), month);
+        }else if(day != null){
+            return userExpenseService.listByDay(user.getId(), day);
         }else{
             return userExpenseService.findAll(user.getId());
         }
