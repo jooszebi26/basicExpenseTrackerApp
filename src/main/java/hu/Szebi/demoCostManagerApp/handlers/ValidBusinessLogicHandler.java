@@ -29,10 +29,25 @@ public class ValidBusinessLogicHandler {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, name + " email is wrong"));
     }
 
+    public UserExpenseEntity findByUserIdAndUserExpenseId(UserExpenseRepository repo, Long userId, Long userExpenseId, String name) {
+        return repo.findByUserIdAndId(userId, userExpenseId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, name + " not found"));
+    }
+
     public List<UserExpenseEntity> findByUserIdAndCategoryId(UserExpenseRepository repo, Long userId, Long categoryId, String name) {
         return repo.findByUserIdAndExpenseCategoryId(userId, categoryId)
                 .orElseThrow(  () -> new ResponseStatusException(HttpStatus.NOT_FOUND, name + " not found"));
     }
+
+    public void deleteByUserIdAndUserExpenseId(UserExpenseRepository repo, Long userId, Long userExpenseId, String name) {
+        repo.deleteByUserIdAndExpenseCategoryId(userId, userExpenseId);
+    }
+
+
+
+
+
+
 
 
 }

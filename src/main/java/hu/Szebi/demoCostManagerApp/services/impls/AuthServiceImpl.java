@@ -1,6 +1,7 @@
 package hu.Szebi.demoCostManagerApp.services.impls;
 
 import hu.Szebi.demoCostManagerApp.data.repositories.UserRepository;
+import hu.Szebi.demoCostManagerApp.handlers.CustomUserDetails;
 import hu.Szebi.demoCostManagerApp.services.AuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,8 @@ public class AuthServiceImpl implements AuthUserService {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return userRepo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
+                var u = userRepo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
+                return new CustomUserDetails(u);
             }
         };
     }

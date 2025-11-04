@@ -9,6 +9,9 @@ import java.util.Optional;
 public interface UserExpenseRepository extends JpaRepository<UserExpenseEntity, Long> {
 
     List<UserExpenseEntity> findByExpenseCategoryId(Long categoryId);
-    Optional<List<UserExpenseEntity>> findByUserIdAndExpenseCategoryId(Long userId, Long categoryId);
     List<UserExpenseEntity> findByUserId(Long userId);
+    Optional<UserExpenseEntity> findByUserIdAndId(Long userId, Long id);
+    Optional<List<UserExpenseEntity>> findByUserIdAndExpenseCategoryId(Long userId, Long categoryId);
+    void deleteByUserIdAndExpenseCategoryId(Long userId, Long categoryId);
+
 }

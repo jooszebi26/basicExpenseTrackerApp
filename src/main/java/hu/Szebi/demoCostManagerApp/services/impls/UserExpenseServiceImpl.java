@@ -7,7 +7,6 @@ import hu.Szebi.demoCostManagerApp.data.repositories.ExpenseCategoryRepository;
 import hu.Szebi.demoCostManagerApp.data.repositories.UserExpenseRepository;
 import hu.Szebi.demoCostManagerApp.data.repositories.UserRepository;
 import hu.Szebi.demoCostManagerApp.handlers.ValidBusinessLogicHandler;
-import hu.Szebi.demoCostManagerApp.services.AuthUserService;
 import hu.Szebi.demoCostManagerApp.services.UserExpenseService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserExpenseDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.UpdateUserExpenseDtoReq;
@@ -35,7 +34,7 @@ public class UserExpenseServiceImpl implements UserExpenseService {
     }
 
     @Override
-    public UserExpenseDtoResponse findById(Long userExpenseId, String email) {
+    public UserExpenseDtoResponse findById(Long userExpenseId, Long userId) {
         var expense = validBusinessLogicHandler.findByIdOr404(userExpenseRepo, userExpenseId, "UserExpense");
         return userExpenseMapper.userExpenseEntityToDto(expense);
     }
@@ -48,23 +47,23 @@ public class UserExpenseServiceImpl implements UserExpenseService {
 
     @Override
     public List<UserExpenseDtoResponse> listByUserId(Long userId) {
-        validBusinessLogicHandler.findByIdOr404(userRepo, userId, "User");
-        return userExpenseMapper.userExpenseEntitiesToDtos(userExpenseRepo.findByUserId(userId));
+        return List.of();
     }
 
     @Override
     public List<UserExpenseDtoResponse> listByUserEmail(String email) {
-        var userEntity = validBusinessLogicHandler.findByEmailOr404(userRepo, email, "User");
-        return userExpenseMapper.userExpenseEntitiesToDtos(
-                userExpenseRepo.findByUserId(userEntity.getId())
-        );
+        return List.of();
     }
 
+
     @Override
-    public UserExpenseDtoResponse save(CreateUserExpenseDtoReq req, String email) {
+    public UserExpenseDtoResponse save(CreateUserExpenseDtoReq req, Long userId) {
         UserExpenseEntity e = new UserExpenseEntity();
-        UserEntity userEntity = userRepo.findById(req.user_id()).orElse(null);
-        ExpenseCategoryEntity expenseCategoryEntity = expenseCategoryRepo.findById(req.category_id()).orElse(null);
+        UserEntity userEntity = validBusinessLogicHandler.findByIdOr404(userRepo, userId, "User");
+        ExpenseCategoryEntity expenseCategoryEntity = validBusinessLogicHandler.findByIdOr404(
+                expenseCategoryRepo,
+                req.category_id(),
+                "ExpenseCategory");
 
         e.setExpenseCategory(expenseCategoryEntity);
         e.setUser(userEntity);
@@ -77,27 +76,33 @@ public class UserExpenseServiceImpl implements UserExpenseService {
     }
 
     @Override
-    public UserExpenseDtoResponse update(UpdateUserExpenseDtoReq req, Long userExpenseId, String email) {
-        UserExpenseEntity e = validBusinessLogicHandler.findByIdOr404(userExpenseRepo, userExpenseId, "UserExpense");
-        UserEntity userEntity;
-        if (req.user_id() != null) {
-            userEntity = validBusinessLogicHandler.findByIdOr404(userRepo, req.user_id(), "User");
-        }
+    public UserExpenseDtoResponse update(UpdateUserExpenseDtoReq req, Long userExpenseId, Long userId) {
+        UserExpenseEntity expense = validBusinessLogicHandler.findByUserIdAndUserExpenseId(userExpenseRepo, userId, userExpenseId, "UserExpense");
+        validBusinessLogicHandler.findByIdOr404(userRepo, userId, "User");
         ExpenseCategoryEntity expenseCategoryEntity;
         if (req.category_id() != null) {
             expenseCategoryEntity = validBusinessLogicHandler.findByIdOr404(expenseCategoryRepo, req.category_id(), "ExpenseCategory");
         }
-        e.setCost(req.cost());
-        e.setExpenseDate(req.expense_date());
-        e.setComment(req.comment());
 
-        UserExpenseEntity updated = userExpenseRepo.save(e);
+        if (req.expense_date() != null) {
+            expense.setCost(req.cost());
+        }
+
+        if (req.expense_date() != null) {
+            expense.setExpenseDate(req.expense_date());
+        }
+
+        if (req.comment() != null) {
+            expense.setComment(req.comment());
+        }
+
+        UserExpenseEntity updated = userExpenseRepo.save(expense);
         return userExpenseMapper.userExpenseEntityToDto(updated);
 
     }
 
     @Override
-    public void deleteById(Long userExpenseId, String email) {
+    public void deleteById(Long userExpenseId, Long userId) {
         validBusinessLogicHandler.deleteByIdOr404(userExpenseRepo, userExpenseId, "UserExpense");
     }
 }

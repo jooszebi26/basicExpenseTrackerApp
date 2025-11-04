@@ -9,12 +9,12 @@ import java.util.List;
 public interface UserExpenseService {
 
     List<UserExpenseDtoResponse> findAll(Long userId);
-    UserExpenseDtoResponse findById(Long userExpenseId, String email);
+    UserExpenseDtoResponse findById(Long userExpenseId, Long userId);
     List<UserExpenseDtoResponse> listByCategoryId(Long categoryId, Long userId);
     List<UserExpenseDtoResponse> listByUserId(Long userId);
     List<UserExpenseDtoResponse> listByUserEmail(String email);
-    UserExpenseDtoResponse save(CreateUserExpenseDtoReq req, String email);
-    UserExpenseDtoResponse update(UpdateUserExpenseDtoReq req, Long userExpenseId, String email);
-    void deleteById (Long userExpenseId, String email);
+    UserExpenseDtoResponse save(CreateUserExpenseDtoReq req, Long userId);
+    UserExpenseDtoResponse update(UpdateUserExpenseDtoReq req, Long userExpenseId, Long userId);
+    void deleteById (Long userExpenseId, Long userId);
 
 }
