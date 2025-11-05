@@ -24,7 +24,7 @@ public interface UserExpenseRepository extends JpaRepository<UserExpenseEntity, 
     """)
     List<UserExpenseEntity> findByUserIdAndYear(
             @Param("userId") Long userId,
-            @Param("month") int month
+            @Param("year") int year
     );
 
     @Query("""
@@ -46,7 +46,7 @@ public interface UserExpenseRepository extends JpaRepository<UserExpenseEntity, 
     """)
     List<UserExpenseEntity> findByUserIdAndDay(
             @Param("userId") Long userId,
-            @Param("month") int day
+            @Param("day") int day
     );
 
 
