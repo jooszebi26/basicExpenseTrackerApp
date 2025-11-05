@@ -7,7 +7,6 @@ public record UserExpenseDtoResponse(
         int cost,
         LocalDate expenseDate,
         String comment,
-        Long userId,
-        Long expenseCategoryId
+        String category
 ) {
 }

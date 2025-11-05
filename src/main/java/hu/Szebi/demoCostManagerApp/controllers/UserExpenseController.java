@@ -21,10 +21,10 @@ public class UserExpenseController {
     private final UserExpenseService userExpenseService;
 
     @GetMapping("/expenses")
-    public List<UserExpenseDtoResponse> getMyExpenses(@RequestParam(name = "categoryId", required = false) Long categoryId,
-                                                      @RequestParam(name="year", required = false) Integer year,
-                                                      @RequestParam(name = "month", required = false) Integer month,
-                                                      @RequestParam(name = "day", required = false) Integer day,
+    public List<UserExpenseDtoResponse> getMyExpenses(@RequestParam(name = "bycategoryId", required = false) Long categoryId,
+                                                      @RequestParam(name="byyear", required = false) Integer year,
+                                                      @RequestParam(name = "bymonth", required = false) Integer month,
+                                                      @RequestParam(name = "byday", required = false) Integer day,
                                                       @AuthenticationPrincipal CustomUserDetails user)
     {
         if (categoryId != null){

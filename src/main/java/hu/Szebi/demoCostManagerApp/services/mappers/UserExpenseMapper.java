@@ -11,8 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserExpenseMapper {
 
-    @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "expenseCategory.id", target = "expenseCategoryId")
+    @Mapping(source = "expenseCategory.name", target = "category")
     UserExpenseDtoResponse userExpenseEntityToDto(UserExpenseEntity e);
     List<UserExpenseDtoResponse> userExpenseEntitiesToDtos(List<UserExpenseEntity> l);
 
