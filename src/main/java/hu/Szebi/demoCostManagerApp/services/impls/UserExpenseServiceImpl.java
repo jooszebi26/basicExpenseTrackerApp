@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,31 +39,6 @@ public class UserExpenseServiceImpl implements UserExpenseService {
         var expense = validBusinessLogicHandler.findByIdOr404(userExpenseRepo, userExpenseId, "UserExpense");
         return userExpenseMapper.userExpenseEntityToDto(expense);
     }
-
-    @Override
-    public List<UserExpenseDtoResponse> listByCategoryId(Long categoryId, Long userId) {
-        var expenses = validBusinessLogicHandler.findByUserIdAndCategoryId(userExpenseRepo,userId,categoryId, "UserExpense");
-        return userExpenseMapper.userExpenseEntitiesToDtos(expenses);
-    }
-
-    @Override
-    public List<UserExpenseDtoResponse> listByYear(Long userId, int year) {
-        var expenses = userExpenseRepo.findByUserIdAndYear(userId, year);
-        return userExpenseMapper.userExpenseEntitiesToDtos(expenses);
-    }
-
-    @Override
-    public List<UserExpenseDtoResponse> listByDay(Long userId, Integer day) {
-        var expenses = userExpenseRepo.findByUserIdAndDay(userId, day);
-        return userExpenseMapper.userExpenseEntitiesToDtos(expenses);
-    }
-
-    @Override
-    public List<UserExpenseDtoResponse> listByMonth(Long userId, int month) {
-        var expenses = userExpenseRepo.findByUserIdAndMonth(userId, month);
-        return userExpenseMapper.userExpenseEntitiesToDtos(expenses);
-    }
-
 
 
 

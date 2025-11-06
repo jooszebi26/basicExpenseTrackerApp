@@ -49,6 +49,30 @@ public interface UserExpenseRepository extends JpaRepository<UserExpenseEntity, 
             @Param("day") int day
     );
 
+    @Query("""
+        SELECT YEAR(e.expenseDate), sum(e.cost)
+        FROM UserExpenseEntity e 
+        WHERE e.user.id = :userId AND YEAR (e.expenseDate) = :year   
+    """)
+
+    Integer[] sumGivenYear(
+            @Param("userId") Long userId,
+            @Param("year") int year
+    );
+
+    @Query("""
+        SELECT MONTH(e.expenseDate), sum(e.cost)
+        FROM UserExpenseEntity e 
+        WHERE e.user.id = :userId AND YEAR (e.expenseDate) = :year
+        GROUP BY MONTH(e.expenseDate)     
+    """)
+    List<Integer[]> sumGivenYearByMonth(
+            @Param("userId") Long userId,
+            @Param("year") int year
+    );
+
+
+
 
 
 
