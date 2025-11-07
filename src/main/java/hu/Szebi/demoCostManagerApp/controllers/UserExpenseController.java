@@ -5,7 +5,9 @@ import hu.Szebi.demoCostManagerApp.services.UserExpenseService;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserExpenseDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.UpdateUserExpenseDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserExpenseDtoResponse;
-import hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation.SumBy;
+import hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation.SumByCategoriesRes;
+import hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation.SumByDaysRes;
+import hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation.SumByMonthsRes;
 import hu.Szebi.demoCostManagerApp.services.impls.AggregationUserExpenseServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,17 +50,67 @@ public class UserExpenseController {
 
 
     @GetMapping("/expenses/summary/{expenseYear}")
-    public List<SumBy> getMySummaryExpenses(
+    public List<SumByMonthsRes> getMyYearlySummaryExpenses(
             @PathVariable(name="expenseYear") Integer year,
-            @RequestParam(name = "byMonths", defaultValue = "false") boolean byMonths,
             @AuthenticationPrincipal CustomUserDetails user)
     {
-        if (byMonths) {
-            return aggregationUserExpenseService.sumGivenYearByMonth(user.getId(), year);
-        }
         return aggregationUserExpenseService.sumGivenYear(user.getId(), year);
-
     }
+
+    @GetMapping("/expenses/summary/{expenseYear}/byCategories")
+    public List<SumByCategoriesRes> getMyYearlySummaryExpensesByCategories(
+            @PathVariable(name="expenseYear") Integer year,
+            @AuthenticationPrincipal CustomUserDetails user)
+    {
+            return aggregationUserExpenseService.sumGivenYearByCategories(user.getId(), year);
+    }
+
+    @GetMapping("/expenses/summary/{expenseYear}/byMonths")
+    public List<SumByMonthsRes> getMyYearlySummaryExpensesByMonths(
+            @PathVariable(name="expenseYear") Integer year,
+            @AuthenticationPrincipal CustomUserDetails user)
+    {
+        return aggregationUserExpenseService.sumGivenYearByMonth(user.getId(), year);
+    }
+
+    @GetMapping("/expenses/summary/{expenseYear}/{expenseMonth}/byCategories")
+    public List<SumByCategoriesRes> getMyMonthlySummaryExpensesByCategories(
+            @PathVariable(name="expenseYear") Integer year,
+            @PathVariable(name="expenseMonth") Integer month,
+            @AuthenticationPrincipal CustomUserDetails user)
+    {
+        return aggregationUserExpenseService.sumGivenMonthByCategories(user.getId(), year, month);
+    }
+
+    @GetMapping("/expenses/summary/{expenseYear}/{expenseMonth}/byDays")
+    public List<SumByDaysRes> getMyMonthlySummaryExpensesByDays(
+            @PathVariable(name="expenseYear") Integer year,
+            @PathVariable(name="expenseMonth") Integer month,
+            @AuthenticationPrincipal CustomUserDetails user)
+    {
+        return aggregationUserExpenseService.sumGivenMonthByDays(user.getId(), year, month);
+    }
+
+    @GetMapping("/expenses/summary/{expenseYear}/{expenseMonth}/{expenseDay}/byCategories")
+    public List<SumByCategoriesRes> getMyDailySummaryExpensesByCategories(
+            @PathVariable(name="expenseYear") Integer year,
+            @PathVariable(name="expenseMonth") Integer month,
+            @PathVariable(name = "expenseDay") Integer day,
+            @AuthenticationPrincipal CustomUserDetails user
+    ){
+        return aggregationUserExpenseService.sumGivenDayByCategories(user.getId(), year, month, day);
+    }
+
+    @GetMapping("/expenses/summary/{expenseYear}/{expenseMonth}/{expenseDay}")
+    public List<SumByDaysRes> getMyDailySummary(
+            @PathVariable(name="expenseYear") Integer year,
+            @PathVariable(name="expenseMonth") Integer month,
+            @PathVariable(name = "expenseDay") Integer day,
+            @AuthenticationPrincipal CustomUserDetails user
+    ){
+        return aggregationUserExpenseService.sumGivenDay(user.getId(), year, month, day);
+    }
+
 
     @GetMapping("/expenses/{expenseId}")
     public UserExpenseDtoResponse getMyExpense(@PathVariable long expenseId,

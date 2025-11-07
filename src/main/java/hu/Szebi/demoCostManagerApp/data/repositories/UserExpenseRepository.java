@@ -55,27 +55,100 @@ public interface UserExpenseRepository extends JpaRepository<UserExpenseEntity, 
         WHERE e.user.id = :userId AND YEAR (e.expenseDate) = :year   
     """)
 
-    Integer[] sumGivenYear(
+    Object[] sumGivenYear(
             @Param("userId") Long userId,
             @Param("year") int year
     );
+
+    //YEARS
 
     @Query("""
         SELECT MONTH(e.expenseDate), sum(e.cost)
         FROM UserExpenseEntity e 
         WHERE e.user.id = :userId AND YEAR (e.expenseDate) = :year
-        GROUP BY MONTH(e.expenseDate)     
+        GROUP BY MONTH(e.expenseDate)
+        ORDER BY sum(e.cost)     
     """)
-    List<Integer[]> sumGivenYearByMonth(
+    List<Object[]> sumGivenYearByMonth(
             @Param("userId") Long userId,
             @Param("year") int year
     );
 
+    @Query("""
+        SELECT e.expenseCategory.name, sum(e.cost)
+        FROM UserExpenseEntity e
+        WHERE e.user.id = :userId and YEAR (e.expenseDate) = :year
+        GROUP BY e.expenseCategory.name
+        ORDER BY sum(e.cost)
+    """)
+    List<Object[]> sumGivenYearByCategories(
+            @Param("userId") Long userId,
+            @Param("year") int year
+    );
+
+    //YEARS END
+
+    //MONTHS
+
+    @Query("""
+        SELECT DAY(e.expenseDate), sum(e.cost)
+        FROM UserExpenseEntity e 
+        WHERE e.user.id = :userId AND YEAR(e.expenseDate) = :year AND MONTH(e.expenseDate) = :month
+        GROUP BY DAY(e.expenseDate)
+        ORDER BY sum(e.cost)
+    """)
+    List<Object[]> sumGivenMonthByDays(
+            @Param("userId") Long userId,
+            @Param("year") int year,
+            @Param("month") int month
+    );
+
+    @Query("""
+        SELECT e.expenseCategory.name, sum(e.cost)
+        FROM UserExpenseEntity e
+        WHERE e.user.id = :userId AND YEAR(e.expenseDate) = :year AND MONTH(e.expenseDate) = :month
+        GROUP BY e.expenseCategory.name
+        ORDER BY sum(e.cost)
+    """)
+
+    List<Object[]> sumGivenMonthByCategories(
+            @Param("userId") Long userId,
+            @Param("year") int year,
+            @Param("month") int month
+    );
+
+    //MONTHS END
+
+    //DAYS
+
+    @Query("""
+        SELECT Day(e.expenseDate), sum(e.cost)
+        FROM UserExpenseEntity e
+        WHERE e.user.id = :userId AND YEAR(e.expenseDate) = :year AND MONTH(e.expenseDate) = :month AND DAY(e.expenseDate) = :day
+        GROUP BY DAY(e.expenseDate)
+        ORDER BY sum(e.cost)
+    """)
+    List<Object[]> sumGivenDay(
+            @Param("userId") Long userId,
+            @Param("year") int year,
+            @Param("month") int month,
+            @Param("day") int day
+    );
 
 
 
-
-
-
+    @Query("""
+        SELECT e.expenseCategory.name, sum(e.cost)
+        FROM UserExpenseEntity e
+        WHERE e.user.id = :userId AND YEAR(e.expenseDate) = :year AND MONTH(e.expenseDate) = :month AND DAY(e.expenseDate) = :day
+        GROUP BY e.expenseCategory.name
+        ORDER BY sum(e.cost)
+    """)
+    List<Object[]> sumGivenDayByCategories(
+            @Param("userId") Long userId,
+            @Param("year") int year,
+            @Param("month") int month,
+            @Param("day") int day
+    );
 
 }

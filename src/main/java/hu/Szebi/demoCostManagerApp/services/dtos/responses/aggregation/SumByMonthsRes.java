@@ -1,7 +1,7 @@
 package hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation;
 
-public record SumBy(
+public record SumByMonthsRes(
     int sumby,
-    int totalCost
+    Long totalCost
 ) {
 }

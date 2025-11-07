@@ -1,11 +1,12 @@
 package hu.Szebi.demoCostManagerApp.services.impls;
 
-import hu.Szebi.demoCostManagerApp.data.entities.UserExpenseEntity;
 import hu.Szebi.demoCostManagerApp.data.repositories.UserExpenseRepository;
 import hu.Szebi.demoCostManagerApp.handlers.ValidBusinessLogicHandler;
 import hu.Szebi.demoCostManagerApp.services.AggregationUserExpenseService;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserExpenseDtoResponse;
-import hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation.SumBy;
+import hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation.SumByDaysRes;
+import hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation.SumByMonthsRes;
+import hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation.SumByCategoriesRes;
 import hu.Szebi.demoCostManagerApp.services.mappers.UserExpenseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,33 +51,57 @@ public class AggregationUserExpenseServiceImpl implements AggregationUserExpense
     }
 
     @Override
-    public List<SumBy> sumGivenYear(Long userId, int year) {
+    public List<SumByMonthsRes> sumGivenYear(Long userId, int year) {
         var expense = userExpenseRepo.sumGivenYear(userId, year);
-        return List.of(new SumBy(expense[0], expense[1]));
+        return List.of(new SumByMonthsRes( (Integer) expense[0], (Long) expense[1]));
     }
 
     @Override
-    public List<SumBy> sumGivenYearByMonth(Long userId, int year) {
+    public List<SumByMonthsRes> sumGivenYearByMonth(Long userId, int year) {
         var expenses = userExpenseRepo.sumGivenYearByMonth(userId, year);
         return expenses.stream()
-                .map(x -> new SumBy(x[0], x[1]))
+                .map(x -> new SumByMonthsRes( (Integer) x[0], (Long) x[1]))
                 .toList();
     }
 
     @Override
-    public List<SumBy> sumByMonthDay(Long userId, int month) {
-        var expenses = userExpenseRepo.findByUserIdAndMonth(userId, month);
-        var result = expenses.stream()
-                .collect(Collectors.groupingBy(x -> x.getExpenseDate().getDayOfMonth(), Collectors.summingInt(UserExpenseEntity::getCost)));
-
-        return result.entrySet().stream()
-                .map(entry -> new SumBy(
-                        entry.getKey(), entry.getValue()
-                ))
+    public List<SumByCategoriesRes> sumGivenYearByCategories(Long userId, int year) {
+        var expenses = userExpenseRepo.sumGivenYearByCategories(userId, year);
+        return expenses.stream()
+                .map(x -> new SumByCategoriesRes((String) x[0], (Long) x[1]))
                 .toList();
     }
 
+    @Override
+    public List<SumByCategoriesRes> sumGivenMonthByCategories(Long userId, int year, int month) {
+        var expenses = userExpenseRepo.sumGivenMonthByCategories(userId, year, month);
+        return expenses.stream()
+                .map(x -> new SumByCategoriesRes((String) x[0], (Long) x[1]))
+                .toList();
+    }
 
+    @Override
+    public List<SumByDaysRes> sumGivenMonthByDays(Long userId, int year, int month) {
+        var expenses = userExpenseRepo.sumGivenMonthByDays(userId, year, month);
+        return expenses.stream()
+                .map(x -> new SumByDaysRes((Integer) x[0], (Long) x[1]))
+                .toList();
+    }
 
+    @Override
+    public List<SumByDaysRes> sumGivenDay(Long userId, int year, int month, int day) {
+        var expenses = userExpenseRepo.sumGivenDay(userId, year, month, day);
+        return expenses.stream()
+                .map(x -> new SumByDaysRes( (Integer) x[0], (Long) x[1]))
+                .toList();
+    }
+
+    @Override
+    public List<SumByCategoriesRes> sumGivenDayByCategories(Long userId, int year, int month, int day) {
+        var expenses = userExpenseRepo.sumGivenDayByCategories(userId, year, month, day);
+        return expenses.stream()
+                .map(x -> new SumByCategoriesRes((String) x[0], (Long) x[1]))
+                .toList();
+    }
 
 }
