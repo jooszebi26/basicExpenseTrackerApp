@@ -2,13 +2,10 @@ package hu.Szebi.demoCostManagerApp.controllers;
 
 import hu.Szebi.demoCostManagerApp.handlers.CustomUserDetails;
 import hu.Szebi.demoCostManagerApp.services.UserExpenseService;
+import hu.Szebi.demoCostManagerApp.services.aggregations.*;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.CreateUserExpenseDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.requests.UpdateUserExpenseDtoReq;
 import hu.Szebi.demoCostManagerApp.services.dtos.responses.UserExpenseDtoResponse;
-import hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation.SumByCategoriesRes;
-import hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation.SumByDaysRes;
-import hu.Szebi.demoCostManagerApp.services.dtos.responses.aggregation.SumByMonthsRes;
-import hu.Szebi.demoCostManagerApp.services.impls.AggregationUserExpenseServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,67 +45,77 @@ public class UserExpenseController {
 
     }
 
-
     @GetMapping("/expenses/summary/{expenseYear}")
-    public List<SumByMonthsRes> getMyYearlySummaryExpenses(
+    public List<YearStatsDto> getMyYearlySummaryExpenses(
             @PathVariable(name="expenseYear") Integer year,
             @AuthenticationPrincipal CustomUserDetails user)
     {
-        return aggregationUserExpenseService.sumGivenYear(user.getId(), year);
+            return aggregationUserExpenseService.listYearStats(user.getId(), year);
     }
 
     @GetMapping("/expenses/summary/{expenseYear}/byCategories")
-    public List<SumByCategoriesRes> getMyYearlySummaryExpensesByCategories(
+    public List<CategoryStatsDto> getMyYearlySummaryExpensesByCategories(
             @PathVariable(name="expenseYear") Integer year,
             @AuthenticationPrincipal CustomUserDetails user)
     {
-            return aggregationUserExpenseService.sumGivenYearByCategories(user.getId(), year);
+            return aggregationUserExpenseService.listYearByCategories(user.getId(), year);
     }
 
     @GetMapping("/expenses/summary/{expenseYear}/byMonths")
-    public List<SumByMonthsRes> getMyYearlySummaryExpensesByMonths(
+    public List<ByMonthStatsDto> getMyYearlySummaryExpensesByMonths(
             @PathVariable(name="expenseYear") Integer year,
             @AuthenticationPrincipal CustomUserDetails user)
     {
-        return aggregationUserExpenseService.sumGivenYearByMonth(user.getId(), year);
+        return aggregationUserExpenseService.listYearByMonth(user.getId(), year);
     }
 
-    @GetMapping("/expenses/summary/{expenseYear}/{expenseMonth}/byCategories")
-    public List<SumByCategoriesRes> getMyMonthlySummaryExpensesByCategories(
+    @GetMapping("/expenses/summary/{expenseYear}/{expenseMonth}")
+    public List<ByMonthStatsDto> getMyMonthlySummaryExpenses(
             @PathVariable(name="expenseYear") Integer year,
             @PathVariable(name="expenseMonth") Integer month,
             @AuthenticationPrincipal CustomUserDetails user)
     {
-        return aggregationUserExpenseService.sumGivenMonthByCategories(user.getId(), year, month);
+        return aggregationUserExpenseService.listMonthStats(user.getId(), year, month);
+    }
+
+
+    @GetMapping("/expenses/summary/{expenseYear}/{expenseMonth}/byCategories")
+    public List<CategoryStatsDto> getMyMonthlySummaryExpensesByCategories(
+            @PathVariable(name="expenseYear") Integer year,
+            @PathVariable(name="expenseMonth") Integer month,
+            @AuthenticationPrincipal CustomUserDetails user)
+    {
+        return aggregationUserExpenseService.listMonthByCategories(user.getId(), year, month);
     }
 
     @GetMapping("/expenses/summary/{expenseYear}/{expenseMonth}/byDays")
-    public List<SumByDaysRes> getMyMonthlySummaryExpensesByDays(
+    public List<ByDayStatsDto> getMyMonthlySummaryExpensesByDays(
             @PathVariable(name="expenseYear") Integer year,
             @PathVariable(name="expenseMonth") Integer month,
             @AuthenticationPrincipal CustomUserDetails user)
     {
-        return aggregationUserExpenseService.sumGivenMonthByDays(user.getId(), year, month);
+        return aggregationUserExpenseService.listMonthByDays(user.getId(), year, month);
     }
 
     @GetMapping("/expenses/summary/{expenseYear}/{expenseMonth}/{expenseDay}/byCategories")
-    public List<SumByCategoriesRes> getMyDailySummaryExpensesByCategories(
+    public List<CategoryStatsDto> getMyDailySummaryExpensesByCategories(
             @PathVariable(name="expenseYear") Integer year,
             @PathVariable(name="expenseMonth") Integer month,
             @PathVariable(name = "expenseDay") Integer day,
             @AuthenticationPrincipal CustomUserDetails user
     ){
-        return aggregationUserExpenseService.sumGivenDayByCategories(user.getId(), year, month, day);
+        return aggregationUserExpenseService.listDayByCategories(user.getId(), year, month, day);
     }
 
+
     @GetMapping("/expenses/summary/{expenseYear}/{expenseMonth}/{expenseDay}")
-    public List<SumByDaysRes> getMyDailySummary(
+    public List<ByDayStatsDto> getMyDailySummary(
             @PathVariable(name="expenseYear") Integer year,
             @PathVariable(name="expenseMonth") Integer month,
             @PathVariable(name = "expenseDay") Integer day,
             @AuthenticationPrincipal CustomUserDetails user
     ){
-        return aggregationUserExpenseService.sumGivenDay(user.getId(), year, month, day);
+        return aggregationUserExpenseService.listDayStats(user.getId(), year, month, day);
     }
 
 

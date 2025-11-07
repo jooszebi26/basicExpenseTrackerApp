@@ -1,6 +1,7 @@
 package hu.Szebi.demoCostManagerApp.data.repositories;
 
 import hu.Szebi.demoCostManagerApp.data.entities.UserExpenseEntity;
+import hu.Szebi.demoCostManagerApp.services.aggregations.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -49,106 +50,144 @@ public interface UserExpenseRepository extends JpaRepository<UserExpenseEntity, 
             @Param("day") int day
     );
 
-    @Query("""
-        SELECT YEAR(e.expenseDate), sum(e.cost)
-        FROM UserExpenseEntity e 
-        WHERE e.user.id = :userId AND YEAR (e.expenseDate) = :year   
-    """)
 
-    Object[] sumGivenYear(
+    // Havi bontás adott évre
+    @Query("""
+  select FUNCTION('month', e.expenseDate) as month,
+         sum(e.cost)                      as total,
+         avg(e.cost)                      as avg,
+         count(e)                         as count
+  from UserExpenseEntity e
+  where e.user.id = :userId
+    and FUNCTION('year', e.expenseDate) = :year
+  group by FUNCTION('month', e.expenseDate)
+  order by FUNCTION('month', e.expenseDate)
+""")
+    List<MonthStatsView> monthlyStats(@Param("userId") Long userId, @Param("year") int year);
+
+    @Query("""
+  select FUNCTION('year', e.expenseDate)   as year,
+         sum(e.cost)                      as total,
+         avg(e.cost)                      as avg,
+         count(e)                         as count
+  from UserExpenseEntity e
+  where e.user.id = :userId
+    and FUNCTION('year', e.expenseDate)  = :year
+  group by FUNCTION('year', e.expenseDate)
+""")
+    List<YearStatsView> statsOfYear(
             @Param("userId") Long userId,
-            @Param("year") int year
+            @Param("year")  int year
     );
 
-    //YEARS
+    // Napi bontás adott év/hónapra
+    @Query("""
+  select FUNCTION('day', e.expenseDate)  as day,
+         sum(e.cost)                      as total,
+         avg(e.cost)                      as avg,
+         count(e)                         as count
+  from UserExpenseEntity e
+  where e.user.id = :userId
+    and FUNCTION('year', e.expenseDate) = :year
+    and FUNCTION('month', e.expenseDate) = :month
+  group by FUNCTION('day', e.expenseDate)
+  order by FUNCTION('day', e.expenseDate)
+""")
+    List<DayStatsView> dailyStats(@Param("userId") Long userId,
+                                  @Param("year") int year,
+                                  @Param("month") int month);
 
     @Query("""
-        SELECT MONTH(e.expenseDate), sum(e.cost)
-        FROM UserExpenseEntity e 
-        WHERE e.user.id = :userId AND YEAR (e.expenseDate) = :year
-        GROUP BY MONTH(e.expenseDate)
-        ORDER BY sum(e.cost)     
-    """)
-    List<Object[]> sumGivenYearByMonth(
+  select FUNCTION('month', e.expenseDate)   as month,
+         sum(e.cost)                      as total,
+         avg(e.cost)                      as avg,
+         count(e)                         as count
+  from UserExpenseEntity e
+  where e.user.id = :userId
+    and FUNCTION('year', e.expenseDate)  = :year
+    and FUNCTION('month', e.expenseDate) = :month
+  group by FUNCTION('month', e.expenseDate)
+""")
+    List<MonthStatsView> statsOfMonth(
             @Param("userId") Long userId,
-            @Param("year") int year
-    );
-
-    @Query("""
-        SELECT e.expenseCategory.name, sum(e.cost)
-        FROM UserExpenseEntity e
-        WHERE e.user.id = :userId and YEAR (e.expenseDate) = :year
-        GROUP BY e.expenseCategory.name
-        ORDER BY sum(e.cost)
-    """)
-    List<Object[]> sumGivenYearByCategories(
-            @Param("userId") Long userId,
-            @Param("year") int year
-    );
-
-    //YEARS END
-
-    //MONTHS
-
-    @Query("""
-        SELECT DAY(e.expenseDate), sum(e.cost)
-        FROM UserExpenseEntity e 
-        WHERE e.user.id = :userId AND YEAR(e.expenseDate) = :year AND MONTH(e.expenseDate) = :month
-        GROUP BY DAY(e.expenseDate)
-        ORDER BY sum(e.cost)
-    """)
-    List<Object[]> sumGivenMonthByDays(
-            @Param("userId") Long userId,
-            @Param("year") int year,
+            @Param("year")  int year,
             @Param("month") int month
     );
 
+    // Kategóriabontás adott évre
     @Query("""
-        SELECT e.expenseCategory.name, sum(e.cost)
-        FROM UserExpenseEntity e
-        WHERE e.user.id = :userId AND YEAR(e.expenseDate) = :year AND MONTH(e.expenseDate) = :month
-        GROUP BY e.expenseCategory.name
-        ORDER BY sum(e.cost)
-    """)
+  select e.expenseCategory.name          as name,
+         sum(e.cost)                      as total,
+         avg(e.cost)                      as avg,
+         count(e)                         as count
+  from UserExpenseEntity e
+  where e.user.id = :userId
+    and FUNCTION('year', e.expenseDate) = :year
+  group by e.expenseCategory.name
+  order by e.expenseCategory.name
+""")
+    List<CategoryStatsView> categoryStats(@Param("userId") Long userId, @Param("year") int year);
 
-    List<Object[]> sumGivenMonthByCategories(
+    //Kategóriabontás adott hónapra
+    @Query("""
+  select e.expenseCategory.name          as name,
+         sum(e.cost)                      as total,
+         avg(e.cost)                      as avg,
+         count(e)                         as count
+  from UserExpenseEntity e
+  where e.user.id = :userId
+    and FUNCTION('year', e.expenseDate)  = :year
+    and FUNCTION('month', e.expenseDate) = :month
+  group by e.expenseCategory.name
+  order by e.expenseCategory.name
+""")
+    List<CategoryStatsView> categoryStatsByMonth(
             @Param("userId") Long userId,
-            @Param("year") int year,
+            @Param("year")  int year,
             @Param("month") int month
     );
 
-    //MONTHS END
-
-    //DAYS
+    //Kategóriabontás adott napra
+    @Query("""
+  select e.expenseCategory.name          as name,
+         sum(e.cost)                      as total,
+         avg(e.cost)                      as avg,
+         count(e)                         as count
+  from UserExpenseEntity e
+  where e.user.id = :userId
+    and FUNCTION('year', e.expenseDate)  = :year
+    and FUNCTION('month', e.expenseDate) = :month
+    and FUNCTION('day', e.expenseDate)   = :day
+  group by e.expenseCategory.name
+  order by e.expenseCategory.name
+""")
+    List<CategoryStatsView> categoryStatsByDay(
+            @Param("userId") Long userId,
+            @Param("year")  int year,
+            @Param("month") int month,
+            @Param("day")   int day
+    );
 
     @Query("""
-        SELECT Day(e.expenseDate), sum(e.cost)
-        FROM UserExpenseEntity e
-        WHERE e.user.id = :userId AND YEAR(e.expenseDate) = :year AND MONTH(e.expenseDate) = :month AND DAY(e.expenseDate) = :day
-        GROUP BY DAY(e.expenseDate)
-        ORDER BY sum(e.cost)
-    """)
-    List<Object[]> sumGivenDay(
+  select FUNCTION('day', e.expenseDate)   as day,
+         sum(e.cost)                      as total,
+         avg(e.cost)                      as avg,
+         count(e)                         as count
+  from UserExpenseEntity e
+  where e.user.id = :userId
+    and FUNCTION('year', e.expenseDate)  = :year
+    and FUNCTION('month', e.expenseDate) = :month
+    and FUNCTION('day', e.expenseDate)   = :day
+  group by FUNCTION('day', e.expenseDate)
+""")
+    List<DayStatsView> statsOfDay(
             @Param("userId") Long userId,
-            @Param("year") int year,
+            @Param("year")  int year,
             @Param("month") int month,
-            @Param("day") int day
+            @Param("day")   int day
     );
 
 
 
-    @Query("""
-        SELECT e.expenseCategory.name, sum(e.cost)
-        FROM UserExpenseEntity e
-        WHERE e.user.id = :userId AND YEAR(e.expenseDate) = :year AND MONTH(e.expenseDate) = :month AND DAY(e.expenseDate) = :day
-        GROUP BY e.expenseCategory.name
-        ORDER BY sum(e.cost)
-    """)
-    List<Object[]> sumGivenDayByCategories(
-            @Param("userId") Long userId,
-            @Param("year") int year,
-            @Param("month") int month,
-            @Param("day") int day
-    );
 
 }
