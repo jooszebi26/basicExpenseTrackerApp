@@ -26,7 +26,6 @@ This project demonstrates a clean, real-world **REST API architecture** using be
 
 ## 🧩 TODO
 
-- Add and optimize aggregation queries (e.g., total expenses by category, monthly and daily summaries).
 - Refactor repository and service logic to use range-based filtering instead of date functions.
-- Create corresponding DTOs for aggregation results to improve performance and clarity.
 - Refactor admin/user controller segregation more
+- implement pagination
